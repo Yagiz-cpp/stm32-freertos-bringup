@@ -417,10 +417,13 @@
  * execution on the failing line for viewing in a debugger. */
 
 /* *INDENT-OFF* */
-extern void vAssertCalled( const char *pcFile, unsigned int ulLine );
-#define configASSERT( x )  \
-    if( ( x ) == 0 )       \
-        vAssertCalled( __FILE__, __LINE__ )
+#define configASSERT( x )         \
+    if( ( x ) == 0 )              \
+    {                             \
+        taskDISABLE_INTERRUPTS(); \
+        for( ; ; )                \
+        ;                         \
+    }
 /* *INDENT-ON* */
 
 /******************************************************************************/

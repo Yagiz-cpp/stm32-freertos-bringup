@@ -1,6 +1,5 @@
 #include "FreeRTOS.h"
 #include "task.h"
-#include <time.h>
 #include "uart.h"
 
 volatile unsigned int g_task1_count = 0;
@@ -8,6 +7,7 @@ volatile unsigned int g_task2_count = 0;
 
 void vTask1(void *pvParameters)
 {
+    (void)pvParameters;
     for(;;)
     {
         uart_puts("Task1 calisti\r\n");
@@ -18,6 +18,7 @@ void vTask1(void *pvParameters)
 
 void vTask2(void *pvParameters)
 {
+    (void)pvParameters;
     for(;;)
     {
         uart_puts("Task2 calisti\r\n");
@@ -26,6 +27,7 @@ void vTask2(void *pvParameters)
     }
 }
 
+/* Called by the kernel if a task overflows its stack. */
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName)
 {
     (void)xTask;
@@ -33,33 +35,21 @@ void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName)
     for(;;);
 }
 
-void vAssertCalled(const char *pcFile, unsigned int ulLine)
+/* Trap on a hard fault (wired in the vector table). */
+void HardFault_Handler(void)
 {
-    uart_puts("ASSERT ");
-    uart_puts(pcFile);
-    uart_puts(":");
-    uart_put_num(ulLine);
-    uart_puts("\r\n");
-    taskDISABLE_INTERRUPTS();
     for(;;);
 }
 
-void HardFault_Handler()
+int main(void)
 {
-    uart_puts("HARDFAULT\r\n");
-}
-int main()
-{
-
     uart_init();
-    uart_puts("BOOT\r\n");
 
     xTaskCreate(vTask1, "Task1", 128, NULL, 1, NULL);
     xTaskCreate(vTask2, "Task2", 128, NULL, 1, NULL);
-    
+
     vTaskStartScheduler();
 
-    uart_puts("SCHED RETURNED\r\n");
+    /* Only reached if there was not enough heap to start the scheduler. */
     for(;;);
 }
-
