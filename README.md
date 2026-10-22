@@ -55,3 +55,7 @@ the two tasks by priority and period.
 ## Target
 
 STM32L476RG · ARM Cortex-M4F · 128 KB RAM · FreeRTOS (ARM_CM4F port, heap_4)
+
+## License
+
+MIT — see [LICENSE](LICENSE).
