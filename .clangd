@@ -1,0 +1,7 @@
+CompileFlags:
+  Compiler: arm-none-eabi-gcc
+  Add:
+    - "-mcpu=cortex-m4"
+    - "-IFreeRTOS-Kernel/include"
+    - "-IFreeRTOS-Kernel/portable/GCC/ARM_CM4F"
+    - "-Isrc"

@@ -1,0 +1,8 @@
+# Build artifacts
+freertos.elf
+freertos.bin
+*.o
+*.map
+
+# Third-party FreeRTOS kernel (clone separately, see README)
+FreeRTOS-Kernel/
